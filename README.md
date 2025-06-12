@@ -67,7 +67,7 @@ cloudflared tunnel run tunnel-name
 ---
 
 ## 🛠️ Tunnel Auto-Start (systemd)
-Archivo: `/etc/systemd/system/cloudflared-dev.service`
+File: `/etc/systemd/system/cloudflared-dev.service`
 ```ini
 [Unit]
 Description=Cloudflare Tunnel - tunnel-name
@@ -117,6 +117,56 @@ cloudflared tunnel list
 ```bash
 docker inspect --format '{{ .Name }} => {{ .HostConfig.RestartPolicy.Name }}' $(docker ps -aq)
 ```
+
+---
+
+## 🚀 Deployment Scripts (manual + automated)
+
+This repo includes reusable scripts to deploy Dockerized frontend projects (like Angular apps) to the Raspberry Pi.
+
+### `deploy-<lowercased-repo-name>.sh`
+
+Each project has its own deployment script located in:
+
+```
+scripts/deploy/deploy-project-name.sh
+```
+
+These scripts:
+- Build Docker images using the project’s Dockerfile
+- Stop and remove any existing container
+- Run the new container with a restart policy
+- Log clear output for manual or automated monitoring
+
+Example:
+```bash
+bash scripts/deploy/deploy-coffeehaven-angular.sh
+```
+
+### `deploy-all.sh`
+
+This meta-script scans `~/projects/` recursively and:
+- Detects if each Git project has updates on the `main` branch
+- If updated, runs the corresponding `deploy-<project>.sh` script
+- Ignores projects without a deployment script
+
+```bash
+bash scripts/deploy-all.sh
+```
+
+> Designed to be used with cron (e.g., daily) or CI/CD hooks.
+
+---
+
+## 📐 Project Conventions
+
+- All frontend projects live under: `~/projects/front/[framework]/project-name`
+- All backend projects live under: `~/projects/back/[framework]/project-name`
+- All full stack projects live under: `~/projects/mono/[framework]/project-name`
+- Each Git repo name matches the folder name
+- Deployment scripts follow the pattern: `deploy-<lowercased-repo-name>.sh`
+- Deployment scripts are located in: `scripts/deploy/`
+- Secrets and environment variables are never stored in this repo
 
 ---
 
