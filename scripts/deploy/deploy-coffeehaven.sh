@@ -1,0 +1,64 @@
+#!/bin/bash
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+# -------------------------------
+# Configuration (hardcoded here for simplicity)
+# -------------------------------
+
+# Name of the Docker container (used to identify and stop it)
+CONTAINER_NAME="coffeehaven-web"
+
+# Name of the Docker image to be built
+IMAGE_NAME="coffeehaven-angular"
+
+# Detect system user (supports sudo)
+USER_NAME="${SUDO_USER:-$USER}"
+
+# Path to the Angular project (must contain Dockerfile and nginx.conf)
+PROJECT_DIR="/home/$USER_NAME/projects/front/angular/CoffeeHaven-Angular"
+
+# Port on the Raspberry Pi to expose the app (maps to port 80 inside the container)
+PORT=8080
+
+# -------------------------------
+# Start Deployment Process
+# -------------------------------
+
+echo "🚀 Starting deployment of '$CONTAINER_NAME' from directory: $PROJECT_DIR"
+
+# Navigate to the project directory
+cd "$PROJECT_DIR"
+
+# -------------------------------
+# Stop and remove the old container (if it exists)
+# -------------------------------
+if docker ps -a --format '{{.Names}}' | grep -Eq "^$CONTAINER_NAME$"; then
+  echo "🛑 Stopping and removing existing container '$CONTAINER_NAME'..."
+  docker stop "$CONTAINER_NAME"
+  docker rm "$CONTAINER_NAME"
+else
+  echo "ℹ️ No existing container named '$CONTAINER_NAME' found."
+fi
+
+# -------------------------------
+# Build the Docker image
+# -------------------------------
+echo "🔨 Building Docker image '$IMAGE_NAME' from Dockerfile..."
+docker build -t "$IMAGE_NAME" .
+
+# -------------------------------
+# Run the new container
+# -------------------------------
+echo "🚀 Starting new container '$CONTAINER_NAME'..."
+docker run -d \
+  --name "$CONTAINER_NAME" \
+  -p "$PORT:80" \
+  --restart unless-stopped \
+  "$IMAGE_NAME"
+
+# -------------------------------
+# Final confirmation
+# -------------------------------
+echo "✅ Deployment completed successfully!"
+echo "🌐 App is now available at: http://localhost:$PORT/ or via Cloudflare Tunnel if configured."
