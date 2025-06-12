@@ -120,6 +120,14 @@ docker inspect --format '{{ .Name }} => {{ .HostConfig.RestartPolicy.Name }}' $(
 
 ---
 
+## 👤 Author
+
+**Roger Navarro**  
+Junior Web Developer (DAW – Web Application Development)  
+🔗 [https://github.com/Roger486](https://github.com/Roger486)
+
+---
+
 ## 📌 Possible Next Steps
 - API deployment (e.g., Laravel + MySQL)
 - Network storage (Personal Drive)
