@@ -1,37 +1,37 @@
 
-# Raspberry Pi - Servidor Personal: Guía General
+# Raspberry Pi – Personal Server: General Guide
 
-Este repositorio documenta la configuración y gestión de un servidor basado en Raspberry Pi 5. Aquí encontrarás cómo desplegar proyectos, automatizar servicios, usar Cloudflare Tunnel, configurar Docker, y seguir buenas prácticas de administración.
-
----
-
-## 🔧 Infraestructura
-- Raspberry Pi 5 con 8GB RAM
-- OS: Debian 12 Bookworm (Raspberry Pi OS basado en Debian)
-
-## 📁 Organización de proyectos
-```
-~/projects/front/angular/nombre-proyecto
-```
-> Se recomienda separar por tipo: `front`, `back`, `mono`...
-
-## 🔐 Seguridad y Red
-- SSH con claves y hostname personalizado
-- IP estática: `192.168.1.41` por ejemplo ( recomendado vía Ethernet)
-- UFW activado (permitiendo solo puerto 22)
+This repository documents the configuration and management of a server based on a Raspberry Pi 5. Here you will find how to deploy projects, automate services, use Cloudflare Tunnel, set up Docker, and follow best practices for administration.
 
 ---
 
-## 🐳 Docker: Ejemplo con Proyecto Angular
-- Dockerfile multietapa: build Angular + servir con Nginx
-- Contenedor llamado: `nombre-contenedor`
-- Expone el puerto: `8080 -> 80`
+## 🔧 Infrastructure
+- Raspberry Pi 5 8GB RAM
+- OS: Debian 12 Bookworm (Raspberry Pi OS based on Debian)
 
-### 🔁 Reinicio automático del contenedor
+## 📁 Project Organization
+```
+~/projects/front/angular/project-name
+```
+> It's recommended to separate by type: `front`, `back`, `mono`...
+
+## 🔐 Security & Network
+- SSH with key authentication and custom hostname
+- Static IP: `192.168.1.41` por ejemplo (recommended via Ethernet)
+- UFW enabled (allowing only port 22)
+
+---
+
+## 🐳 Docker: Example with Angular Project
+- Multi-stage Dockerfile: build Angular + serve with Nginx
+- Container name: `container-name`
+- Exposes port: `8080 -> 80`
+
+### 🔁 Automatic container restart
 ```bash
 sudo docker update --restart unless-stopped nombre-contenedor
 ```
-Verificación:
+Check status:
 ```bash
 docker inspect -f '{{ .HostConfig.RestartPolicy.Name }}' nombre-contenedor
 ```
@@ -39,14 +39,14 @@ docker inspect -f '{{ .HostConfig.RestartPolicy.Name }}' nombre-contenedor
 ---
 
 ## ☁️ Cloudflare Tunnel
-- Túnel creado: `nombre-tunel`
-- Dominio personalizado: `proyecto-ejemplo.midominio.xyz` # ej. my-project.developer.xyz
+- Tunnel created: `tunnel-name`
+- Custom domain: `example-project.mydomain.xyz` # ej. my-project.developer.xyz
 
-### 📝 Configuración
-Archivo: `~/.cloudflared/config.yml`
+### 📝 Configuration
+File: `~/.cloudflared/config.yml`
 ```yaml
 tunnel: dev-tunnel
-credentials-file: /home/usuario/.cloudflared/<UUID>.json
+credentials-file: /home/user/.cloudflared/<UUID>.json
 
 ingress:
   - hostname: my-project.developer.xyz
@@ -54,30 +54,30 @@ ingress:
   - service: http_status:404
 ```
 
-### 🌐 Vinculación DNS
+### 🌐 DNS Linking
 ```bash
 cloudflared tunnel route dns nombre-tunel my-project.developer.xyz
 ```
 
-### ▶️ Ejecutar túnel manualmente
+### ▶️ Run tunnel manually
 ```bash
-cloudflared tunnel run nombre-tunel
+cloudflared tunnel run tunnel-name
 ```
 
 ---
 
-## 🛠️ Autoejecución del túnel (systemd)
+## 🛠️ Tunnel Auto-Start (systemd)
 Archivo: `/etc/systemd/system/cloudflared-dev.service`
 ```ini
 [Unit]
-Description=Cloudflare Tunnel - dev-tunnel
+Description=Cloudflare Tunnel - tunnel-name
 After=network.target
 
 [Service]
 TimeoutStartSec=0
 Type=simple
 User=username
-ExecStart=/usr/bin/cloudflared tunnel run dev-tunnel
+ExecStart=/usr/bin/cloudflared tunnel run tunnel-name
 Restart=always
 RestartSec=5s
 
@@ -85,18 +85,18 @@ RestartSec=5s
 WantedBy=multi-user.target
 ```
 
-### 📌 Comandos útiles
+### 📌 Useful Commands
 ```bash
-sudo systemctl daemon-reexec     # Reinicia systemd
-sudo systemctl daemon-reload     # Recarga servicios
-sudo systemctl enable cloudflared-dev  # Habilita en arranque
-sudo systemctl start cloudflared-dev   # Arranca el servicio
-systemctl status cloudflared-dev       # Ver estado
+sudo systemctl daemon-reexec     # Restart systemd
+sudo systemctl daemon-reload     # Reload services
+sudo systemctl enable cloudflared-dev  # Enable on boot
+sudo systemctl start cloudflared-dev   # Start service
+systemctl status cloudflared-dev       # Check status
 ```
 
-### 🛡️ Recuperación automática
-- Reinicio automático si falla.
-- Configuración avanzada opcional:
+### 🛡️ Automatic Recovery
+- Auto-restart if the tunnel fails.
+- Optional advanced configuration:
 ```ini
 StartLimitIntervalSec=30
 StartLimitBurst=3
@@ -104,26 +104,26 @@ StartLimitBurst=3
 
 ---
 
-## 🔍 Comprobaciones útiles
-- Verificar túnel:
+## 🔍 Useful Checks
+- Verify tunnel:
 ```bash
-cloudflared tunnel info nombre-tunel
+cloudflared tunnel info tunnel-name
 ```
-- Ver túneles activos:
+- List active tunnels:
 ```bash
 cloudflared tunnel list
 ```
-- Ver contenedores con restart activo:
+- List containers with restart policy:
 ```bash
 docker inspect --format '{{ .Name }} => {{ .HostConfig.RestartPolicy.Name }}' $(docker ps -aq)
 ```
 
 ---
 
-## 📌 Próximos pasos posibles
-- Despliegue de API (por ejemplo, Laravel + MySQL)
-- Almacenamiento en red (Drive personal)
-- Scripts de despliegue automatizado (CI/CD)
-- Monitoreo de servicios y contenedores
+## 📌 Possible Next Steps
+- API deployment (e.g., Laravel + MySQL)
+- Network storage (Personal Drive)
+- Automated deployment scripts (CI/CD)
+- Monitoring for services and containers
 
-> Este repositorio está pensado para evolucionar y adaptarse a más proyectos y necesidades conforme se desplieguen nuevos servicios en la Raspberry Pi.
+> This repository is designed to evolve and adapt to new projects and needs as more services are deployed on the Raspberry Pi.
