@@ -160,13 +160,58 @@ bash scripts/deploy-all.sh
 
 ## 📐 Project Conventions
 
-- All frontend projects live under: `~/projects/front/[framework]/project-name`
-- All backend projects live under: `~/projects/back/[framework]/project-name`
-- All full stack projects live under: `~/projects/mono/[framework]/project-name`
+- All frontend projects live under: `~/projects/front/[framework]/repository-name`
+- All backend projects live under: `~/projects/back/[framework]/repository-name`
+- All full stack projects live under: `~/projects/mono/[framework]/repository-name`
 - Each Git repo name matches the folder name
+
+**Examples:**
+
+| Project Type Example | Path Example                                               |
+|----------------------|------------------------------------------------------------|
+| Angular Frontend     | `~/projects/front/angular/CoffeeHaven-Angular`             |
+| Laravel Backend      | `~/projects/back/laravel/HostControl-api`                  |
+| Full Stack (Mono)    | `~/projects/mono/angular-laravel/HostControl`              |
+
+> Folder names reflect GitHub repository names (including capital letters), but scripts, images, and containers always use lowercase names based on the repo.
+
+---
+
+## 🧮 Script Conventions
+
 - Deployment scripts follow the pattern: `deploy-<lowercased-repo-name>.sh`
 - Deployment scripts are located in: `scripts/deploy/`
-- Secrets and environment variables are never stored in this repo
+
+**Examples:**
+
+| Repo Name Example     | Script Name                    | Location                                          |
+|-----------------------|--------------------------------|---------------------------------------------------|
+| `CoffeeHaven-Angular` | `deploy-coffeehaven-angular.sh`| `scripts/deploy/deploy-coffeehaven-angular.sh`    |
+| `HostControl-api`     | `deploy-hostcontrol-api.sh`    | `scripts/deploy/deploy-hostcontrol-api.sh`        |
+| `HostControl`         | `deploy-hostcontrol.sh`        | `scripts/deploy/deploy-hostcontrol.sh`            |
+
+---
+
+## 📦 Container and Image Conventions
+
+Docker containers and images follow this convention:
+
+`<project-name>-<service-name>`  # all lowercased
+
+Examples:
+- coffeehaven-frontend
+- hostcontrol-backend
+- hostcontrol-db
+
+> **Note:** While folder names may reflect GitHub repository names (including capital letters), all container and image names are standardized to lowercase and follow this naming convention for consistency and automation.
+
+---
+
+## 🔐 Security Practices
+
+- Secrets and environment variables are never stored in this repo.
+- SSH uses public key authentication.
+- UFW only allows port 22 by default.
 
 ---
 
