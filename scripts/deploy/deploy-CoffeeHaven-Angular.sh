@@ -6,11 +6,13 @@ set -e
 # Configuration (hardcoded here for simplicity)
 # -------------------------------
 
-# Name of the Docker container (used to identify and stop it)
-CONTAINER_NAME="coffeehaven-web"
+# Project info
+PROJECT_NAME="coffeehaven"
+SERVICE_NAME="frontend"
 
-# Name of the Docker image to be built
-IMAGE_NAME="coffeehaven-angular"
+# Construct names from convention
+CONTAINER_NAME="${PROJECT_NAME}-${SERVICE_NAME}"      # => coffeehaven-frontend
+IMAGE_NAME="${PROJECT_NAME}-${SERVICE_NAME}"          # => coffeehaven-frontend
 
 # Detect system user (supports sudo)
 USER_NAME="${SUDO_USER:-$USER}"
