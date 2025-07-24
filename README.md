@@ -1,3 +1,7 @@
+![Status](https://img.shields.io/badge/status-maintained-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![OS](https://img.shields.io/badge/platform-Raspberry%20Pi-red)
+![Cloudflare](https://img.shields.io/badge/protected_by-Cloudflare-orange)
 
 # Raspberry Pi – Personal Server: General Guide
 
@@ -215,6 +219,13 @@ Examples:
 
 ---
 
+## 📄 Additional Docs
+
+- [SSH access via Cloudflare Tunnel](docs/ssh-cloudflare-tunnel.md)
+- [Email forwarding setup](docs/email-forwarding.md)
+
+---
+
 ## 👤 Author
 
 **Roger Navarro**  
@@ -226,7 +237,7 @@ Junior Web Developer (DAW – Web Application Development)
 ## 📌 Possible Next Steps
 - API deployment (e.g., Laravel + MySQL)
 - Network storage (Personal Drive)
-- Automated deployment scripts (CI/CD)
+- Automated deployment scripts (CI/CD) WIP with bash scripts
 - Monitoring for services and containers
 
 > This repository is designed to evolve and adapt to new projects and needs as more services are deployed on the Raspberry Pi.
