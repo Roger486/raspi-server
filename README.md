@@ -234,6 +234,14 @@ Junior Web Developer (DAW – Web Application Development)
 
 ---
 
+## 🙌 Acknowledgment
+
+If you find this useful, feel free to credit:
+
+**Roger Navarro** – [github.com/Roger486](https://github.com/Roger486)
+
+---
+
 ## 📌 Possible Next Steps
 - API deployment (e.g., Laravel + MySQL)
 - Network storage (Personal Drive)
