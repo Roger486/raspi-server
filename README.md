@@ -10,8 +10,23 @@ This repository documents the configuration and management of a server based on 
 ---
 
 ## 🔧 Infrastructure
-- Raspberry Pi 5 8GB RAM
-- OS: Debian 12 Bookworm (Raspberry Pi OS based on Debian)
+- Server: Raspberry Pi 5 8GB RAM
+- Storage: 480GB SATA SSD (USB 3.0, boot + data)
+- Backup: microSD card kept offline for emergency recovery
+- OS: Raspberry Pi OS (Debian 12 Bookworm)
+
+## 💾 Boot & Storage Strategy
+
+- Raspberry Pi boots directly from a USB 3.0 SATA SSD
+- SSD is used for:
+  - Operating system
+  - Docker images and volumes
+  - Logs and long-running services
+- microSD card is only used for:
+  - Initial setup
+  - Offline backup and emergency rollback
+
+> ⚠️ Running Docker on SD cards is discouraged due to high I/O and wear.
 
 ## 📁 Project Organization
 ```
@@ -30,6 +45,9 @@ This repository documents the configuration and management of a server based on 
 - Multi-stage Dockerfile: build Angular + serve with Nginx
 - Container name: `container-name`
 - Exposes port: `8080 -> 80`
+
+> ℹ️ Docker generates continuous disk I/O (logs, layers, volumes).  
+> Using an SSD significantly improves stability and prevents SD card corruption.
 
 ### 🔁 Automatic container restart
 ```bash
@@ -219,6 +237,14 @@ Examples:
 
 ---
 
+## 📊 System Status
+
+- Uptime-oriented configuration (24/7)
+- Services auto-restart on failure
+- Storage optimized for long-running workloads
+
+---
+
 ## 📄 Additional Docs
 
 - [SSH access via Cloudflare Tunnel](docs/ssh-cloudflare-tunnel.md)
@@ -243,7 +269,6 @@ If you find this useful, feel free to credit:
 ---
 
 ## 📌 Possible Next Steps
-- API deployment (e.g., Laravel + MySQL)
 - Network storage (Personal Drive)
 - Automated deployment scripts (CI/CD) WIP with bash scripts
 - Monitoring for services and containers
