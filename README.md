@@ -36,7 +36,7 @@ This repository documents the configuration and management of a server based on 
 
 ## 🔐 Security & Network
 - SSH with key authentication and custom hostname
-- Static IP: `192.168.1.41` por ejemplo (recommended via Ethernet)
+- Static IP (e.g., 192.168.1.41) — recommended via Ethernet
 - UFW enabled (allowing only port 22)
 
 ---
